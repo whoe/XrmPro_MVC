@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Net;
 
 namespace XrmPro_MVC
 {
@@ -19,6 +20,11 @@ namespace XrmPro_MVC
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel(options =>
+                {
+                    options.Listen(IPAddress.Loopback, 5000);
+                })
+                .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
     }
