@@ -25,6 +25,7 @@ namespace XrmPro_MVC
                     options.Listen(IPAddress.Loopback, 5000);
                 })
                 .UseIISIntegration()
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseStartup<Startup>()
                 .Build();
     }

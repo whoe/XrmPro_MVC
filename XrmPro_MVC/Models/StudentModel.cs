@@ -1,30 +1,31 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Data;
 using System.ComponentModel.DataAnnotations;
+using System;
+using System.Collections.Generic;
 
 namespace XrmPro_MVC.Models
 {
-
     public class StudentModel
     {
-        [Required]
         [Range(0, int.MaxValue)]
-        public int id;
+        public int Id { get; set; }
+
 
         [Required]
-        [RegularExpression("[^'\"]+")]
-        [MaxLength(20)]
-        public string name;
+        [StringLength(20, ErrorMessage = "Max Length 20")]
+        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "only letters and digits")]
+        public string Name { get; set; }
 
         [Required]
-        [RegularExpression(@"\w+@\w+.\w{0,3}")]
-        [MaxLength(50)]
-        public string email;
+        [StringLength(50, ErrorMessage = "Max Length 50")]
+        [RegularExpression(@"\w+@\w+\.\w{2,3}", ErrorMessage = "example@xrmpro.ru")]
+        public string Email { get; set; }
 
+        [StringLength(50, ErrorMessage = "Max Length 50")]
+        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "only letters and digits")]
         [Required]
-        [MaxLength(50)]
-        [RegularExpression("[^'\"]+")]
-        public string git;
+        public string Git { get; set; }
 
         private static readonly string filenameDatabase = "students.db";
         private static readonly string connectionString = $"Data Source={filenameDatabase};";
@@ -57,7 +58,7 @@ namespace XrmPro_MVC.Models
                 using (var connection = new SqliteConnection(connectionString))
                 {
                     string sql = $"INSERT INTO Students (id, name, email, git) " +
-                        $"VALUES ({id}, '{name}', '{email}', '{git}')";
+                        $"VALUES ({Id}, '{Name}', '{Email}', '{Git}')";
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandType = CommandType.Text;
@@ -95,10 +96,10 @@ namespace XrmPro_MVC.Models
 
                         if (reader.Read())
                         {
-                            this.id = reader.GetInt32(0);
-                            this.name = reader.GetString(1);
-                            this.email = reader.GetString(2);
-                            this.git = reader.GetString(3);
+                            this.Id = reader.GetInt32(0);
+                            this.Name = reader.GetString(1);
+                            this.Email = reader.GetString(2);
+                            this.Git = reader.GetString(3);
                         }
                         else
                             hasStudent = false;
@@ -115,10 +116,10 @@ namespace XrmPro_MVC.Models
             using (var connection = new SqliteConnection(connectionString))
             {
                 string sql = "UPDATE Students SET " +
-                    $"name = '{name}', " +
-                    $"email = '{email}', " +
-                    $"git = '{git}' " +
-                    $"WHERE id = '{id}'";
+                    $"name = '{Name}', " +
+                    $"email = '{Email}', " +
+                    $"git = '{Git}' " +
+                    $"WHERE id = '{Id}'";
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandType = CommandType.Text;
@@ -131,7 +132,7 @@ namespace XrmPro_MVC.Models
             return result;
         }
 
-        public bool Delete(int id)
+        public static bool Delete(int id)
         {
             bool result;
             using (var connection = new SqliteConnection(connectionString))
@@ -143,6 +144,36 @@ namespace XrmPro_MVC.Models
                     command.CommandText = sql;
                     connection.Open();
                     result = command.ExecuteNonQuery() == 0 ? false : true;
+                    connection.Close();
+                }
+            }
+
+            return result;
+        }
+
+        public static IEnumerable<StudentModel> ReadAll()
+        {
+            var result = new List<StudentModel>();
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM Students";
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = sql;
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var student = new StudentModel();
+                            student.Id = reader.GetInt32(0);
+                            student.Name = reader.GetString(1);
+                            student.Email = reader.GetString(2);
+                            student.Git = reader.GetString(3);
+                            result.Add(student);
+                        }
+                    }
                     connection.Close();
                 }
             }

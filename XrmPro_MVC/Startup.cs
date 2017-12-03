@@ -10,7 +10,7 @@ namespace XrmPro_MVC
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(options => options.MaxModelValidationErrors = 30);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -20,11 +20,11 @@ namespace XrmPro_MVC
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseStaticFiles();
             app.UseMvc(routes =>
                     routes.MapRoute(
                     name: "default",
-                    template: "{controller=Student}/{action}/{id?}")
+                    template: "{controller=Student}/{action=ViewAll}/{id?}")
             );
         }
     }

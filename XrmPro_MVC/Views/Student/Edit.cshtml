@@ -1,0 +1,41 @@
+﻿@model XrmPro_MVC.Models.StudentModel
+<h2>Edit</h2>
+<hr />
+<div class="form">
+    @using (Html.BeginForm("Edit", "Student", FormMethod.Post))
+    {
+        <div class="row row-margin">
+            <div class="col-1">@Html.DisplayNameFor(m => m.Id)</div>
+            <div class="col-4">@Html.EditorFor(m => m.Id)</div>
+            <div class="col">@Html.ValidationMessageFor(m => m.Id)</div>
+        </div>
+
+        <div class="row row-margin">
+            <div class="col-1">@Html.DisplayNameFor(m => m.Name)</div>
+            <div class="col-4">@Html.EditorFor(m => m.Name)</div>
+            <div class="col">@Html.ValidationMessageFor(m => m.Name)</div>
+        </div>
+
+        <div class="row row-margin">
+            <div class="col-1">@Html.DisplayNameFor(m => m.Email)</div>
+            <div class="col-4">@Html.EditorFor(m => m.Email)</div>
+            <div class="col">@Html.ValidationMessageFor(m => m.Email)</div>
+        </div>
+
+        <div class="row row-margin">
+            <div class="col-1">@Html.DisplayNameFor(m => m.Git)</div>
+            <div class="col-4">@Html.EditorFor(m => m.Git)</div>
+            <div class="col">@Html.ValidationMessageFor(m => m.Git)</div>
+        </div>
+
+        <div style="margin-top: 10px; ">
+            <button class="btn btn-primary" type="submit">Сохранить</button>
+        </div>
+    }
+</div>
+<div>
+    <a asp-action="ViewAll">Back to List</a>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
