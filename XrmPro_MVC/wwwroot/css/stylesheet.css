@@ -8,7 +8,7 @@
     width: 100%;
 }
 
-.field-validation-error
+.text-danger-inline 
 {
     color: #856404;
     background-color: #fff3cd;
@@ -18,9 +18,4 @@
     border: 1px solid transparent;
     border-radius: .25rem;
     margin-left: 20px;
-}
-
-.form-control
-{
-    height: min-content;
 }
