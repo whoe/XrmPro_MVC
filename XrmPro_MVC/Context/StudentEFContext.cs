@@ -22,6 +22,7 @@ namespace XrmPro_MVC.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<StudentEFModel>().ToTable("StudentEF");
+            modelBuilder.Entity<StudentEFModel>().HasKey(x => x.Id);
         }
     }
 }
